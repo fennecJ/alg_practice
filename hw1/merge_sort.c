@@ -31,7 +31,8 @@ return  merge(ll,c,rr,len-c);
 }
 
 int main(){
-FILE* fi,fo;
+FILE* fi;
+FILE* fo;
 fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
 int len;
@@ -42,6 +43,7 @@ while(fscanf(fi,"%d\n",a+i)!=EOF)
 i++;
 int* b = split(a,len);
 i = 0;
+fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
 fprintf(fo,"%d\n",b[i]);
 return 0;
