@@ -12,7 +12,6 @@ if(l[j]<r[k])
 tmp[i] = l[j++];
 else
 tmp[i] = r[k++];
-
 }
 for(;j<l_len;j++)
 tmp[i++] = l[j];
@@ -31,14 +30,19 @@ int* rr = split(r,len-c);
 return  merge(ll,c,rr,len-c);
 }
 
-
 int main(){
-int len = 10;
-int a[10]={5,1,3,4,7,10,15,6,9,8};
-int* b = split(a,len);
+FILE* fi,fo;
+fi=fopen("input.txt","r");
+fo=fopen("output.txt","w");
+int len;
+fscanf(fi,"%d\n",&len);
+int* a = malloc(sizeof(int)*len);
 int i = 0;
-printf("test");
+while(fscanf(fi,"%d\n",a+i)!=EOF)
+i++;
+int* b = split(a,len);
+i = 0;
 for( ; i < len ; i++)
-printf("%d ",b[i]);
+fprintf(fo,"%d\n",b[i]);
 return 0;
 }
