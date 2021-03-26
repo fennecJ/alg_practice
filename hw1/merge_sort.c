@@ -20,14 +20,12 @@ tmp[i++] = r[k];
 return tmp;
 }
 int* split(int* a,int len){
-    if(len<2)
+if(len<2)
     return a;
 int c = len / 2;
-int* l = a;
-int* r = &(a[c]);
-int* ll = split(l,c);
-int* rr = split(r,len-c);
-return  merge(ll,c,rr,len-c);
+int* l = split(a,c);
+int* r = split(&(a[c]),len-c);
+return  merge(l,c,r,len-c);
 }
 
 int main(){
