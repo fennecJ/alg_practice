@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-void insertion(int *arr,int len){
+void ins(int *arr,int len){
     for(int i = 1; i <len; i++){
        int key = arr[i] ;
        int j=i-1 ;
@@ -10,7 +10,6 @@ void insertion(int *arr,int len){
             }
         arr[j+1] = key;
     }
-
 }
 int main(){
 FILE* fi;
@@ -23,7 +22,7 @@ int* a = malloc(sizeof(int)*len);
 int i = 0;
 while(fscanf(fi,"%d\n",a+i)!=EOF)
 i++;
-insertion(a,len);
+ins(a,len);
 i = 0;
 fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
