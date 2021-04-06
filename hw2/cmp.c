@@ -1,10 +1,13 @@
 #include<stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
 void swap(int *a,int *b);
 int part(int *arr,int l,int r);
 void qksort(int *arr,int l,int r,int k);
 void ins(int *arr,int l,int r);
 int main(){
+srand(time(NULL));
 FILE* fi;
 FILE* fo;
 FILE* fo2;
@@ -14,11 +17,27 @@ fo2=fopen("k_record.txt","w");
 int len;
 fscanf(fi,"%d\n",&len);
 int* a = malloc(sizeof(int)*len);
+int* b = malloc(sizeof(int)*len);
 int i = 0;
-while(fscanf(fi,"%d\n",a+i)!=EOF)
+while(fscanf(fi,"%d\n",b+i)!=EOF)
 i++;
-qksort(a,0,len-1,20);
+clock_t start, end;
+int cpu_time_used;
+int ckt = 999999999;
+for(int k = 0;k<len;k++){
+start = clock(); 
+memcpy(a,b,sizeof(int)*len);
+qksort(a,0,len-1,k);
 i = 0;
+end = clock();
+cpu_time_used = end - start;
+if(cpu_time_used<ckt){
+ckt = cpu_time_used;
+printf("%d %d\n",k,cpu_time_used);
+}
+fprintf(fo2,"%d %d\n",k,cpu_time_used);
+}
+
 fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
 fprintf(fo,"%d\n",a[i]);
@@ -47,15 +66,15 @@ int part(int *arr,int l,int r){
 void qksort(int *arr,int l,int r,int k){
     if(l>=r)
     return;
-    int q;
     if(l-r+1<=k){
     ins(arr,l,r+1);
-    q=r;
+    return;
     }
-    else
-    q = part(arr,l,r);
+    else{
+    int q = part(arr,l,r);
     qksort(arr,l,q-1,k);
     qksort(arr,q+1,r,k);
+    }
 
 }
 void ins(int *arr,int l,int r){
