@@ -6,14 +6,13 @@ void swap(int *a,int *b);
 int part(int *arr,int l,int r);
 void qksort(int *arr,int l,int r,int k);
 void ins(int *arr,int l,int r);
-int main(){
+int main(int argc,char* argv[]){
 srand(time(NULL));
 FILE* fi;
 FILE* fo;
 FILE* fo2;
 fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
-fo2=fopen("k_record.txt","w");
 int len;
 fscanf(fi,"%d\n",&len);
 int* a = malloc(sizeof(int)*len);
@@ -24,6 +23,7 @@ i++;
 clock_t start, end;
 int cpu_time_used;
 int ckt = 999999999;
+if(argc==1){
 for(int k = 0;k<len;k++){
 start = clock(); 
 memcpy(a,b,sizeof(int)*len);
@@ -35,12 +35,18 @@ if(cpu_time_used<ckt){
 ckt = cpu_time_used;
 printf("%d %d\n",k,cpu_time_used);
 }
-fprintf(fo2,"%d %d\n",k,cpu_time_used);
 }
-
+}else
+{
+    int k = atoi(argv[1]);
+    qksort(b,0,len-1,k);
+}
 fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
+if(argc==1)
 fprintf(fo,"%d\n",a[i]);
+else
+fprintf(fo,"%d\n",b[i]);
 return 0;
 }
 
