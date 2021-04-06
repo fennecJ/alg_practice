@@ -6,11 +6,11 @@ void swap(int *a,int *b);
 int part(int *arr,int l,int r);
 void qksort(int *arr,int l,int r,int k);
 void ins(int *arr,int l,int r);
+void oqsort(int *arr,int l,int r);
 int main(int argc,char* argv[]){
 srand(time(NULL));
 FILE* fi;
 FILE* fo;
-FILE* fo2;
 fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
 int len;
@@ -24,28 +24,20 @@ clock_t start, end;
 int cpu_time_used;
 int ckt = 999999999;
 if(argc==1){
-for(int k = 0;k<len;k++){
-start = clock(); 
-memcpy(a,b,sizeof(int)*len);
-qksort(a,0,len-1,k);
-i = 0;
-end = clock();
-cpu_time_used = end - start;
-if(cpu_time_used<ckt){
-ckt = cpu_time_used;
-printf("%d %d\n",k,cpu_time_used);
-}
-}
+    printf("You didn't send any Argument!\nAvailable candidate:\ni:insertion_sort\nq:quick_sort\n{Integer}:Hybrid quick_sort with k = {Integer}\n");
 }else
 {
+    if(argv[1][0]=='q')
+    oqsort(b,0,len-1);
+    else if(argv[1][0]=='i')
+    ins(b,0,len);
+    else{
     int k = atoi(argv[1]);
     qksort(b,0,len-1,k);
+    }
 }
 fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
-if(argc==1)
-fprintf(fo,"%d\n",a[i]);
-else
 fprintf(fo,"%d\n",b[i]);
 return 0;
 }
@@ -72,17 +64,29 @@ int part(int *arr,int l,int r){
 void qksort(int *arr,int l,int r,int k){
     if(l>=r)
     return;
-    if(l-r+1<=k){
-    ins(arr,l,r+1);
-    return;
-    }
-    else{
+    if(r-l>k){
     int q = part(arr,l,r);
     qksort(arr,l,q-1,k);
     qksort(arr,q+1,r,k);
     }
-
+    else{
+    ins(arr,l,r);
+    return;
+    }
 }
+
+void oqsort(int *arr,int l,int r){
+    if(l>=r)
+    return;
+    else{
+    int q = part(arr,l,r);
+    oqsort(arr,l,q-1);
+    oqsort(arr,q+1,r);
+    }
+}
+
+
+
 void ins(int *arr,int l,int r){
     for(int i = l; i < r; i++){
        int key = arr[i];
