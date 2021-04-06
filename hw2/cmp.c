@@ -15,27 +15,30 @@ fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
 int len;
 fscanf(fi,"%d\n",&len);
-int* a = malloc(sizeof(int)*len);
 int* b = malloc(sizeof(int)*len);
 int i = 0;
 while(fscanf(fi,"%d\n",b+i)!=EOF)
 i++;
 clock_t start, end;
-int cpu_time_used;
-int ckt = 999999999;
+double cpu_time_used;
 if(argc==1){
-    printf("You didn't send any Argument!\nAvailable candidate:\ni:insertion_sort\nq:quick_sort\n{Integer}:Hybrid quick_sort with k = {Integer}\n");
+    printf("You didn't send any Argument!\nAvailable candidate:\ni:insertion_sort\nq:quick_sort\n{Integer}:Hybrid quick_sort with k = {Integer}\nYou can monitor the time cost with -st in second  Argument\n");
 }else
-{
+{   
+    start = clock(); 
+    int k = atoi(argv[1]);
     if(argv[1][0]=='q')
     oqsort(b,0,len-1);
     else if(argv[1][0]=='i')
     ins(b,0,len);
-    else{
-    int k = atoi(argv[1]);
+    else
     qksort(b,0,len-1,k);
-    }
+    end = clock();
+    cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 }
+if(argc==3)
+    if(strcmp(argv[2],"-st")==0)
+        printf("Time Cost:%f\n", cpu_time_used);
 fprintf(fo,"%d\n",len);
 for( ; i < len ; i++)
 fprintf(fo,"%d\n",b[i]);
