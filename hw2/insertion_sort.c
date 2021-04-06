@@ -17,9 +17,16 @@ FILE* fi;
 FILE* fo;
 fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
-int a[9]={5,4,3,2,1,1,5,7,6};
-insertion(a,9);
-for(int i = 0;i<9;i++)
-printf("%d ",a[i]);
-printf("\n");
+int len;
+fscanf(fi,"%d\n",&len);
+int* a = malloc(sizeof(int)*len);
+int i = 0;
+while(fscanf(fi,"%d\n",a+i)!=EOF)
+i++;
+insertion(a,len);
+i = 0;
+fprintf(fo,"%d\n",len);
+for( ; i < len ; i++)
+fprintf(fo,"%d\n",a[i]);
+return 0;
 }
