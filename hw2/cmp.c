@@ -40,7 +40,7 @@ if(argc==3)
     if(strcmp(argv[2],"-st")==0)
         printf("Time Cost:%f\n", cpu_time_used);
 fprintf(fo,"%d\n",len);
-for( ; i < len ; i++)
+for(i=0 ; i < len ; i++)
 fprintf(fo,"%d\n",b[i]);
 return 0;
 }
