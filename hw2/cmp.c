@@ -73,7 +73,7 @@ void qksort(int *arr,int l,int r,int k){
     qksort(arr,q+1,r,k);
     }
     else{
-    ins(arr,l,r);
+    ins(arr,l,r+1);
     return;
     }
 }
