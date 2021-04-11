@@ -8,7 +8,9 @@ int partition(int *arr,int l,int r,int key);
 int main(int argc,char* argv[]){
 srand(time(NULL));
 FILE* fi;
+FILE* fo;
 fi=fopen("input.txt","r");
+fo=fopen("output.txt","w");
 int len;
 fscanf(fi,"%d\n",&len);
 int k = atoi(argv[1]);
@@ -22,6 +24,7 @@ i++;
 
 int tar = sel(a,0,len-1,k);
 printf("%dth smallest number is %d\n",k,tar);
+fprintf(fo,"%d\n%d\n%d\n",len,k,tar);
 }
 
 int sel(int* arr,int l,int r,int i){
