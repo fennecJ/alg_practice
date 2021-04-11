@@ -1,21 +1,27 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 int ins(int* arr,int len);
 int sel(int* arr,int l,int r,int i);
 void swap(int *a,int *b);
 int partition(int *arr,int l,int r,int key);
-int main(){
+int main(int argc,char* argv[]){
+srand(time(NULL));
 FILE* fi;
 fi=fopen("input.txt","r");
 int len;
 fscanf(fi,"%d\n",&len);
+int k = atoi(argv[1]);
+if(!k||k>=len)
+k = rand()%len+1;
+
 int* a = malloc(sizeof(int)*len);
 int i = 0;
 while(fscanf(fi,"%d\n",a+i)!=EOF)
 i++;
-printf("%d %d　%d\n",a[0],a[1],a[1]);
-int tar = sel(a,0,len-1,5);
-printf("\n\n%d\n",tar);
+
+int tar = sel(a,0,len-1,k);
+printf("%dth smallest number is %d\n",k,tar);
 }
 
 int sel(int* arr,int l,int r,int i){
