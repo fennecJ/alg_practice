@@ -14,7 +14,7 @@ fo=fopen("output.txt","w");
 int len;
 fscanf(fi,"%d\n",&len);
 int k = atoi(argv[1]);
-if(!k||k>=len)
+if(!k||k>len)
 k = rand()%len+1;
 
 int* a = malloc(sizeof(int)*len);
