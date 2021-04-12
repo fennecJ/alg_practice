@@ -45,6 +45,7 @@ int tmp;
 node_t* t;
 while(1){
 scanf("%s",cmd);
+cmd[9]='\0';
 if(cmd[0]=='q')
 break;
 else{
