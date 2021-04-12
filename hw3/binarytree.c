@@ -43,7 +43,7 @@ tree_t* T=new_tree();
 char cmd[10];
 int tmp;
 node_t* t;
-printf("s {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
+printf("Available commands:\ns {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
 while(1){
 scanf("%s",cmd);
 cmd[9]='\0';
@@ -51,8 +51,6 @@ if(cmd[0]=='q')
 break;
 else{
 int c=cmd_parse(cmd);
-if(c!=-1)
-
 switch (c)
     {   
         case 1:
@@ -138,7 +136,7 @@ switch (c)
             printf("Parent not found\n");
         break;
         case 9:
-            printf("s {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
+            printf("Available commands:\ns {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
             break;
     default:
         printf("Invalid command, type help to see available operations\n");
@@ -211,9 +209,9 @@ void print_tree(node_t* root, int i,int tar){
     if(i!=0){
         print_tab(i-1);
             if(root->key==tar)
-            printf("|-------"ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
+            printf("|======="ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
             else
-            printf("|-------%d\n",root->key);
+            printf("|=======%d\n",root->key);
     }else{
             if(root->key==tar)
             printf(ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
