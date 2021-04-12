@@ -1,6 +1,13 @@
 #include<stdio.h>
 #include<stdlib.h> 
 #define global_space 5
+#ifdef __linux__
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#else
+#define ANSI_COLOR_RED     ""
+#define ANSI_COLOR_RESET   ""
+#endif
 struct node
 {
     struct node* left;
@@ -52,17 +59,19 @@ void print_space(int i){
 }
 
 
-void print_tree(node_t* root, int i){
+void print_tree(node_t* root, int i,int tar){
     if(root==NULL)
     return;
     i++;
-    print_tree(root->right,i);
+    print_tree(root->right,i,tar);
     printf("\n");
     print_space((i*global_space));
+    if(root->key==tar)
+    printf(ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
+    else
     printf("%d\n",root->key);
-    print_tree(root->left,i);
+    print_tree(root->left,i,tar);
 }
-
 
 tree_t* new_tree(){
     tree_t* T = malloc(sizeof(tree_t));
@@ -71,17 +80,49 @@ tree_t* new_tree(){
     T->root=NULL;
     return T;
 }
-
-
-
 int main(){
 tree_t* T=new_tree();
+char cmd;
+int tmp=1;
+while(1){
+scanf("%c",&cmd);
+if(cmd=='q')
+break;
+else{
+scanf("%d",&tmp);
+switch (cmd)
+    {
+        case 'i':
+            printf("Insert %d into tree\n",tmp);
+            insert(T,tmp);
+            print_tree(T->root,0,tmp);
+        break;
+        /*case i:
+            insert(T,tmp);
+        break;
+        case i:
+            insert(T,tmp);
+        break;
+        case i:
+            insert(T,tmp);
+        break;
+        case i:
+            insert(T,tmp);*/
+        break;
+    default:
+        break;
+    }
+
+}
+
+}
+
 insert(T,30);
 insert(T,45);
 insert(T,18);
 insert(T,25);
 insert(T,10);
-print_tree(T->root,1);
+//print_tree(T->root,0,10);
 }
 
 node_t* new_node(int k){
