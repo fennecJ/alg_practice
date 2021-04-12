@@ -28,6 +28,7 @@ node_t* search(node_t* head,int x);
 void insert(tree_t* T,int x);
 void print_tree(node_t* root, int i,int tar);
 
+node_t* parent(tree_t* T,node_t* tar);
 int cmd_parse(char* cmd);
 
 
@@ -40,8 +41,9 @@ scanf("%s",cmd);
 if(cmd[0]=='q')
 break;
 else{
-scanf("%d",&tmp);
 int c=cmd_parse(cmd);
+if(c!=-1)
+scanf("%d",&tmp);
 switch (c)
     {
         case 6:
@@ -60,6 +62,13 @@ switch (c)
         break;
         case i:
             insert(T,tmp);*/
+        case 8:
+            printf("Finding parent of %d in tree\n",tmp);
+            node_t* p=parent(T,search(T->root,tmp));
+            if(p)
+            print_tree(T->root,0,p->key);
+            else
+            printf("Parent not found\n");
         break;
     default:
         printf("Invalid command, type help to see available operations\n");
@@ -151,7 +160,7 @@ void print_tree(node_t* root, int i,int tar){
 }
 node_t* parent(tree_t* T,node_t* tar){
     node_t* head=T->root;
-    if(head==tar)
+    if(head==tar||tar==NULL)
     return NULL;
     while(head){
         if(head->left==tar||head->right==tar)
@@ -171,5 +180,9 @@ int cmd_parse(char* cmd){
     printf("%s\n",cmd);
     if(strcmp(cmd,"i")==0)
         return 6;
+    if(strcmp(cmd,"par")==0)
+        return 8;
+
+    return -1;
 }
 
