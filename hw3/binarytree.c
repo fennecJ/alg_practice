@@ -27,6 +27,8 @@ tree_t* new_tree();
 node_t* search(node_t* head,int x);
 void insert(tree_t* T,int x);
 void print_tree(node_t* root, int i,int tar);
+node_t* max_node(node_t* head);
+node_t* min_node(node_t* head);
 
 node_t* parent(tree_t* T,node_t* tar);
 int cmd_parse(char* cmd);
@@ -43,10 +45,37 @@ break;
 else{
 int c=cmd_parse(cmd);
 if(c!=-1)
-scanf("%d",&tmp);
+
 switch (c)
-    {
+    {   
+        case 1:
+            scanf("%d",&tmp);
+            printf("Finding %d in tree\n",tmp);
+            if(search(T->root,tmp))
+            print_tree(T->root,0,tmp);
+            else
+            printf("%d was not found!!\n",tmp);
+            break;
+        case 2:
+            printf("Finding max element in tree\n");
+            if(T->root){
+            node_t* t=max_node(T->root);
+            printf("Max element is %d\n",t->key);
+            print_tree(T->root,0,t->key);
+            }else
+            printf("The tree was empty!!\n");
+        break;
+        case 3:
+            printf("Finding min element in tree\n");
+            if(T->root){
+            node_t* t=min_node(T->root);
+            printf("min element is %d\n",t->key);
+            print_tree(T->root,0,t->key);
+            }else
+            printf("The tree was empty!!\n");
+        break;
         case 6:
+            scanf("%d",&tmp);
             printf("Insert %d into tree\n",tmp);
             if(search(T->root,tmp))
             printf("Tree already contain %d\n",tmp);
@@ -66,6 +95,7 @@ switch (c)
         case i:
             insert(T,tmp);*/
         case 8:
+            scanf("%d",&tmp);
             printf("Finding parent of %d in tree\n",tmp);
             node_t* p=parent(T,search(T->root,tmp));
             if(p)
@@ -150,17 +180,30 @@ void print_tree(node_t* root, int i,int tar){
     if(i!=0){
         print_tab(i-1);
             if(root->key==tar)
-            printf("|-------"ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
+            printf("|-------"ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
             else
             printf("|-------%d\n",root->key);
     }else{
             if(root->key==tar)
-            printf(ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
+            printf(ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
             else
             printf("%d\n",root->key);
     }
     print_tree(root->left,i+1,tar);
 }
+
+node_t* max_node(node_t* head){
+    while(head->right)
+    head=head->right;
+    return head;
+}
+
+node_t* min_node(node_t* head){
+    while(head->left)
+    head=head->left;
+    return head;
+}
+
 node_t* parent(tree_t* T,node_t* tar){
     node_t* head=T->root;
     if(head==tar||tar==NULL)
@@ -181,8 +224,20 @@ void transp(tree_t* T,node_t* u,node_t* v){
 }*/
 int cmd_parse(char* cmd){
     printf("%s\n",cmd);
+    if(strcmp(cmd,"s")==0)
+        return 1;
+    if(strcmp(cmd,"max")==0)
+        return 2;
+    if(strcmp(cmd,"min")==0)
+        return 3;
+    if(strcmp(cmd,"su")==0)
+        return 4;
+    if(strcmp(cmd,"pr")==0)
+        return 5;
     if(strcmp(cmd,"i")==0)
         return 6;
+    if(strcmp(cmd,"d")==0)
+        return 7;
     if(strcmp(cmd,"par")==0)
         return 8;
 
