@@ -30,7 +30,7 @@ void print_tree(node_t* root, int i,int tar);
 node_t* max_node(node_t* head);
 node_t* min_node(node_t* head);
 node_t* suc(tree_t* T,node_t* head);
-
+node_t* pred(tree_t* T,node_t* head);
 
 node_t* parent(tree_t* T,node_t* tar);
 int cmd_parse(char* cmd);
@@ -40,6 +40,7 @@ int main(){
 tree_t* T=new_tree();
 char cmd[10];
 int tmp;
+node_t* t;
 while(1){
 scanf("%s",cmd);
 if(cmd[0]=='q')
@@ -61,7 +62,7 @@ switch (c)
         case 2:
             printf("Finding max element in tree\n");
             if(T->root){
-            node_t* t=max_node(T->root);
+            t=max_node(T->root);
             printf("Max element is %d\n",t->key);
             print_tree(T->root,0,t->key);
             }else
@@ -70,7 +71,7 @@ switch (c)
         case 3:
             printf("Finding min element in tree\n");
             if(T->root){
-            node_t* t=min_node(T->root);
+            t=min_node(T->root);
             printf("min element is %d\n",t->key);
             print_tree(T->root,0,t->key);
             }else
@@ -79,7 +80,7 @@ switch (c)
         case 4:
             scanf("%d",&tmp);
             printf("Finding successor of %d in tree\n",tmp);
-            node_t* t=search(T->root,tmp);
+            t=search(T->root,tmp);
             if(t){
                 t=suc(T,t);
                 if(t){
@@ -87,6 +88,20 @@ switch (c)
                 print_tree(T->root,0,t->key);
                 }else
                 printf("%d have no successor!!\n",tmp);
+            }else
+            printf("%d was not in the tree!!\n",tmp);
+        break;
+        case 5:
+            scanf("%d",&tmp);
+            printf("Finding predecessor of %d in tree\n",tmp);
+            t=search(T->root,tmp);
+            if(t){
+                t=pred(T,t);
+                if(t){
+                printf("Predecessor of %d in tree: %d\n",tmp,t->key);
+                print_tree(T->root,0,t->key);
+                }else
+                printf("%d have no predecessor!!\n",tmp);
             }else
             printf("%d was not in the tree!!\n",tmp);
         break;
@@ -219,6 +234,17 @@ node_t* suc(tree_t* T,node_t* head){
         return min_node(head->right);
     node_t* y = parent(T,head);
     while(y&&head==y->right){
+        head=y;
+        y=parent(T,y);
+    }
+    return y;
+}
+
+node_t* pred(tree_t* T,node_t* head){
+    if(head->left)
+        return max_node(head->left);
+    node_t* y = parent(T,head);
+    while(y&&head==y->left){
         head=y;
         y=parent(T,y);
     }
