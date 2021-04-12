@@ -53,24 +53,29 @@ void insert(tree_t* T,int x){
     tmp->right=ins;
 }
 
-void print_space(int i){
+void print_tab(int i){
     for(int j = 0;j<i;j++)
-    printf(" ");
+    printf("|\t");
 }
 
 
 void print_tree(node_t* root, int i,int tar){
     if(root==NULL)
     return;
-    i++;
-    print_tree(root->right,i,tar);
-    printf("\n");
-    print_space((i*global_space));
-    if(root->key==tar)
-    printf(ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
-    else
-    printf("%d\n",root->key);
-    print_tree(root->left,i,tar);
+    print_tree(root->right,i+1,tar);
+    if(i!=0){
+        print_tab(i-1);
+            if(root->key==tar)
+            printf("|-------"ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
+            else
+            printf("|-------%d\n",root->key);
+    }else{
+            if(root->key==tar)
+            printf(ANSI_COLOR_RED"%d"ANSI_COLOR_RESET"\n",root->key);
+            else
+            printf("%d\n",root->key);
+    }
+    print_tree(root->left,i+1,tar);
 }
 
 tree_t* new_tree(){
