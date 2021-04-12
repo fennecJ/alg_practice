@@ -29,6 +29,8 @@ void insert(tree_t* T,int x);
 void print_tree(node_t* root, int i,int tar);
 node_t* max_node(node_t* head);
 node_t* min_node(node_t* head);
+node_t* suc(tree_t* T,node_t* head);
+
 
 node_t* parent(tree_t* T,node_t* tar);
 int cmd_parse(char* cmd);
@@ -74,6 +76,20 @@ switch (c)
             }else
             printf("The tree was empty!!\n");
         break;
+        case 4:
+            scanf("%d",&tmp);
+            printf("Finding successor of %d in tree\n",tmp);
+            node_t* t=search(T->root,tmp);
+            if(t){
+                t=suc(T,t);
+                if(t){
+                printf("Successor of %d in tree: %d\n",tmp,t->key);
+                print_tree(T->root,0,t->key);
+                }else
+                printf("%d have no successor!!\n",tmp);
+            }else
+            printf("%d was not in the tree!!\n",tmp);
+        break;
         case 6:
             scanf("%d",&tmp);
             printf("Insert %d into tree\n",tmp);
@@ -112,12 +128,6 @@ switch (c)
 
 }
 
-insert(T,30);
-insert(T,45);
-insert(T,18);
-insert(T,25);
-insert(T,10);
-//print_tree(T->root,0,10);
 }
 
 node_t* new_node(int k){
@@ -203,6 +213,18 @@ node_t* min_node(node_t* head){
     head=head->left;
     return head;
 }
+
+node_t* suc(tree_t* T,node_t* head){
+    if(head->right)
+        return min_node(head->right);
+    node_t* y = parent(T,head);
+    while(y&&head==y->right){
+        head=y;
+        y=parent(T,y);
+    }
+    return y;
+}
+
 
 node_t* parent(tree_t* T,node_t* tar){
     node_t* head=T->root;
