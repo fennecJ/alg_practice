@@ -11,12 +11,8 @@ FILE* fi;
 FILE* fo;
 fi=fopen("input.txt","r");
 fo=fopen("output.txt","w");
-int len;
-fscanf(fi,"%d\n",&len);
-int k = atoi(argv[1]);
-if(!k||k>len)
-k = rand()%len+1;
-
+int len,k;
+fscanf(fi,"%d\n%d\n",&len,&k);
 int* a = malloc(sizeof(int)*len);
 int i = 0;
 while(fscanf(fi,"%d\n",a+i)!=EOF)
