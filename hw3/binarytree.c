@@ -43,6 +43,7 @@ tree_t* T=new_tree();
 char cmd[10];
 int tmp;
 node_t* t;
+printf("s {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
 while(1){
 scanf("%s",cmd);
 cmd[9]='\0';
@@ -137,7 +138,7 @@ switch (c)
             printf("Parent not found\n");
         break;
         case 9:
-            printf("s {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\n");
+            printf("s {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
             break;
     default:
         printf("Invalid command, type help to see available operations\n");
@@ -318,7 +319,6 @@ void mod_parent(tree_t* T,node_t* tar,node_t* post){
 }
 
 int cmd_parse(char* cmd){
-    printf("%s\n",cmd);
     if(strcmp(cmd,"s")==0)
         return 1;
     if(strcmp(cmd,"max")==0)
