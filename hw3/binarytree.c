@@ -48,6 +48,9 @@ switch (c)
     {
         case 6:
             printf("Insert %d into tree\n",tmp);
+            if(search(T->root,tmp))
+            printf("Tree already contain %d\n",tmp);
+            else
             insert(T,tmp);
             print_tree(T->root,0,tmp);
         break;
