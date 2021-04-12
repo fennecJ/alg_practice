@@ -31,8 +31,10 @@ node_t* max_node(node_t* head);
 node_t* min_node(node_t* head);
 node_t* suc(tree_t* T,node_t* head);
 node_t* pred(tree_t* T,node_t* head);
-
+void transp(tree_t* T,node_t* u,node_t* v);
+void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
+void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
 
 
@@ -114,17 +116,16 @@ switch (c)
             insert(T,tmp);
             print_tree(T->root,0,tmp);
         break;
-        /*case i:
-            insert(T,tmp);
+        case 7:
+            scanf("%d",&tmp);
+            printf("Delete %d from tree\n",tmp);
+            t=search(T->root,tmp);
+            if(t){
+                delete(T,t);
+                print_tree(T->root,0,tmp);
+            }else
+            printf("%d was not in the tree!!\n",tmp);
         break;
-        case i:
-            insert(T,tmp);
-        break;
-        case i:
-            insert(T,tmp);
-        break;
-        case i:
-            insert(T,tmp);*/
         case 8:
             scanf("%d",&tmp);
             printf("Finding parent of %d in tree\n",tmp);
@@ -266,10 +267,52 @@ node_t* parent(tree_t* T,node_t* tar){
     }
     return NULL;
 }
-/*
+
 void transp(tree_t* T,node_t* u,node_t* v){
-    if()
-}*/
+    if(parent(T,u)==NULL)
+        T->root=v;
+    else if(u==(parent(T,u)->left))
+    parent(T,u)->left=v;
+    else
+    parent(T,u)->right=v;
+    if(v)
+    mod_parent(T,v,parent(T,u));
+}
+
+void delete(tree_t* T,node_t* z){
+    if(z->left==NULL)
+        transp(T,z,z->right);
+    else if(z->right==NULL)
+        transp(T,z,z->left);
+    else{
+        node_t* y = min_node(z->right);
+        if(parent(T,y)!=z){
+            transp(T,y,y->right);
+            y->right=z->right;
+            mod_parent(T,y->right,y);
+        }
+        transp(T,z,y);
+        y->left=z->left;
+        mod_parent(T,y->left,y);
+    }
+}
+
+void mod_parent(tree_t* T,node_t* tar,node_t* post){
+    node_t* head=T->root;
+    if(head==tar||tar==NULL)
+    return ;
+    while(head){
+        if(head->left==tar||head->right==tar){
+            head=post;
+            break;
+            }
+        else if (head->key>tar->key)
+        head=head->left;
+        else
+        head=head->right;
+    }
+}
+
 int cmd_parse(char* cmd){
     printf("%s\n",cmd);
     if(strcmp(cmd,"s")==0)
@@ -288,7 +331,8 @@ int cmd_parse(char* cmd){
         return 7;
     if(strcmp(cmd,"par")==0)
         return 8;
-
+    if(strcmp(cmd,"help")==0)
+        return 9;
     return -1;
 }
 
