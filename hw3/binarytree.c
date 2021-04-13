@@ -14,6 +14,7 @@ struct node
     struct node* left;
     struct node* right;
     int key;
+    int cnt;
     //int times=0;
 };
 typedef struct node node_t;
@@ -110,8 +111,9 @@ switch (c)
         case 6:
             scanf("%d",&tmp);
             printf("Insert %d into tree\n",tmp);
-            if(search(T->root,tmp))
-            printf("Tree already contain %d\n",tmp);
+            t = search(T->root,tmp);
+            if(t)
+            t->cnt++;
             else
             insert(T,tmp);
             print_tree(T->root,0,tmp);
@@ -120,7 +122,12 @@ switch (c)
             scanf("%d",&tmp);
             printf("Delete %d from tree\n",tmp);
             t=search(T->root,tmp);
-            if(t){
+            if(t)
+            if(t->cnt>1){
+            t->cnt--;
+            print_tree(T->root,0,tmp);
+            }
+            else{
                 delete(T,t);
                 print_tree(T->root,0,tmp);
             }else
@@ -156,6 +163,7 @@ node_t* new_node(int k){
     n->left=NULL;
     n->right=NULL;
     n->key=k;
+    n->cnt=1;
     return n;
 }
 
@@ -208,15 +216,26 @@ void print_tree(node_t* root, int i,int tar){
     print_tree(root->right,i+1,tar);
     if(i!=0){
         print_tab(i-1);
-            if(root->key==tar)
-            printf("|======="ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
-            else
-            printf("|=======%d\n",root->key);
+            if(root->key==tar){
+                if(root->cnt>1)
+                printf("|======="ANSI_COLOR_RED"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
+                else
+                printf("|======="ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);  
+            }
+            else if(root->cnt>1)
+            printf("|=======%d[%d]\n",root->key,root->cnt);
+            else printf("|=======%d\n",root->key);
+            
     }else{
-            if(root->key==tar)
-            printf(ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);
-            else
-            printf("%d\n",root->key);
+            if(root->key==tar){
+                if(root->cnt>1)
+                printf(ANSI_COLOR_RED"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
+                else
+                printf(ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);  
+            }
+            else if(root->cnt>1)
+            printf("%d[%d]\n",root->key,root->cnt);
+            else printf("%d\n",root->key);
     }
     print_tree(root->left,i+1,tar);
 }
