@@ -25,6 +25,7 @@ fprintf(fo,"%d\n%d\n%d\n",len,k,tar);
 
 int sel(int* arr,int l,int r,int i){
 int len = r-l+1;
+if(len>1)
 if(i>0&&i<=len){
     int h_len = ((len+4)/5);
     int hold[h_len];
