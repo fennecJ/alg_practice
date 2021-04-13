@@ -35,7 +35,7 @@ node_t* pred(tree_t* T,node_t* head);
 void transp(tree_t* T,node_t* u,node_t* v);
 void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
-void mod_parent(tree_t* T,node_t* tar,node_t* post);
+//void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
 
 
@@ -297,8 +297,6 @@ void transp(tree_t* T,node_t* u,node_t* v){
     parent(T,u)->left=v;
     else
     parent(T,u)->right=v;
-    if(v)
-    mod_parent(T,v,parent(T,u));
 }
 
 void delete(tree_t* T,node_t* z){
@@ -311,27 +309,9 @@ void delete(tree_t* T,node_t* z){
         if(parent(T,y)!=z){
             transp(T,y,y->right);
             y->right=z->right;
-            mod_parent(T,y->right,y);
         }
         transp(T,z,y);
         y->left=z->left;
-        mod_parent(T,y->left,y);
-    }
-}
-
-void mod_parent(tree_t* T,node_t* tar,node_t* post){
-    node_t* head=T->root;
-    if(head==tar||tar==NULL)
-    return ;
-    while(head){
-        if(head->left==tar||head->right==tar){
-            head=post;
-            break;
-            }
-        else if (head->key>tar->key)
-        head=head->left;
-        else
-        head=head->right;
     }
 }
 
