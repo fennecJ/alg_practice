@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h> 
 #include<string.h>
-#define global_space 5
+//#define global_space 5
 #ifdef __linux__
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
