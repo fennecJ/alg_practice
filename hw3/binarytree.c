@@ -313,6 +313,7 @@ void delete(tree_t* T,node_t* z){
         transp(T,z,y);
         y->left=z->left;
     }
+    free(z);
 }
 
 int cmd_parse(char* cmd){
