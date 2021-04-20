@@ -4,9 +4,11 @@
 #include<stdbool.h>
 //#define global_space 5
 #ifdef __linux__
+#define ANSI_COLOR_BLUE    "\e[0;34m"
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 #else
+#define ANSI_COLOR_BLUE    ""
 #define ANSI_COLOR_RED     ""
 #define ANSI_COLOR_RESET   ""
 #endif
@@ -43,6 +45,7 @@ void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
 void l_rotate(tree_t* T,node_t* x);
 void r_rotate(tree_t* T,node_t* x);
+void rb_insert(tree_t* T,node_t* z)
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
 
@@ -210,6 +213,77 @@ while(head!=NULL && head->key!=x){
 return head;
 }
 
+void rb_insert(tree_t* T,node_t* z){
+    node_t* y = T->nil;
+    node_t* x = T->root;
+    while(x!=T->nil){
+        y=x;
+        if(z->key<x->key)
+            x=x->left;
+        else
+            x=x->right;
+    }
+    if(y==T->nil)
+        T->root=z;
+    else if (z->key<y->key)
+        y->left=z;
+    else
+        y->right=z;
+    z->left=T->nil;
+    z->right=T->nil;
+    z->color=RED;
+    FIX(T,z);
+}
+
+void FIX(tree_t* T,node_t* z){
+    while(parent(z)->color==RED){
+        if(parent(z)==parent(parent(z))->left){
+            node_t* y = parent(parent(z))->right;
+            if(y->color==RED){
+                parent(z)->color=BLK;
+                y->color=BLK;
+                parent(parent(z))->color=RED;
+                z=parent(parent(z));
+            }
+            else if (z==parent(z)->right)
+            {
+                z=parent(z);
+                l_rotate(T,z);
+            }
+            parent(z)->color=BLK;
+            parent(parent(z))->color=RED;
+            r_rotate(T,parent(parent(z)));
+        }else{
+            node_t* y = parent(parent(z))->left;
+            if(y->color==RED){
+                parent(z)->color=BLK;
+                y->color=BLK;
+                parent(parent(z))->color=RED;
+                z=parent(parent(z));
+            }
+            else if (z==parent(z)->left)
+            {
+                z=parent(z);
+                r_rotate(T,z);
+            }
+            parent(z)->color=BLK;
+            parent(parent(z))->color=RED;
+            l_rotate(T,parent(parent(z)));
+        }
+    }
+T->root->color=BLK;
+}
+
+
+
+
+
+
+
+
+
+
+
 void insert(tree_t* T,int x){
     node_t* head=T->root;
     node_t* ins=new_node(T,x);
@@ -242,25 +316,25 @@ void print_tree(tree_t* T,node_t* root, int i,int tar){
     if(i!=0){
         print_tab(i-1);
             if(root->key==tar){
-                if(root->cnt>1)
+                if(root->color==RED)
                 printf("|======="ANSI_COLOR_RED"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
                 else
-                printf("|======="ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);  
+                printf("|======="ANSI_COLOR_BLUE"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
             }
-            else if(root->cnt>1)
-            printf("|=======%d[%d]\n",root->key,root->cnt);
-            else printf("|=======%d\n",root->key);
+            else if(root->color==RED)
+            printf("|======="ANSI_COLOR_RED"%d[%d]"ANSI_COLOR_RESET"\n",root->key,root->cnt);
+            else printf("|======="ANSI_COLOR_BLUE"%d[%d]"ANSI_COLOR_RESET"\n",root->key,root->cnt);
             
     }else{
             if(root->key==tar){
-                if(root->cnt>1)
+                if(root->color==RED)
                 printf(ANSI_COLOR_RED"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
                 else
-                printf(ANSI_COLOR_RED"{%d}"ANSI_COLOR_RESET"\n",root->key);  
+                printf(ANSI_COLOR_BLUE"{%d[%d]}"ANSI_COLOR_RESET"\n",root->key,root->cnt);
             }
-            else if(root->cnt>1)
-            printf("%d[%d]\n",root->key,root->cnt);
-            else printf("%d\n",root->key);
+            else if(root->color==RED)
+            printf(ANSI_COLOR_RED"%d[%d]"ANSI_COLOR_RESET"\n",root->key,root->cnt);
+            else printf(ANSI_COLOR_BLUE"%d[%d]"ANSI_COLOR_RESET"\n",root->key,root->cnt);
     }
     print_tree(T,root->left,i+1,tar);
 }
