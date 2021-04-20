@@ -10,8 +10,8 @@
 #define ANSI_COLOR_RED     ""
 #define ANSI_COLOR_RESET   ""
 #endif
-#define RED true;
-#define BLK false;
+#define RED true
+#define BLK false
 
 struct node
 {
@@ -25,6 +25,7 @@ struct node
 typedef struct node node_t;
 struct tree{
     node_t* root;
+    node_t* nil;
 };
 
 typedef struct tree tree_t;
@@ -178,6 +179,8 @@ tree_t* new_tree(){
     if(!T)
     return T;
     T->root=NULL;
+    T->nil=malloc(sizeof(node_t));
+    T->nil->color=BLK;
     return T;
 }
 
@@ -283,8 +286,8 @@ node_t* pred(tree_t* T,node_t* head){
 
 node_t* parent(tree_t* T,node_t* tar){
     node_t* head=T->root;
-    if(head==tar||tar==NULL)
-    return NULL;
+    if(head==tar)
+    return T->nil;
     while(head){
         if(head->left==tar||head->right==tar)
         return head;
@@ -293,7 +296,7 @@ node_t* parent(tree_t* T,node_t* tar){
         else
         head=head->right;
     }
-    return NULL;
+    return T->nil;
 }
 
 void transp(tree_t* T,node_t* u,node_t* v){
@@ -322,6 +325,16 @@ void delete(tree_t* T,node_t* z){
     free(z);
 }
 
+
+void l_rotate(tree_t* T,node_t* x){
+    node_t* y = x->left;
+    x->right=y->left;
+    if(parent(T,x)==NULL)
+        T->root=y;
+    //else if(x==parent(x)->left)
+}
+
+
 int cmd_parse(char* cmd){
     if(strcmp(cmd,"s")==0)
         return 1;
@@ -341,6 +354,8 @@ int cmd_parse(char* cmd){
         return 8;
     if(strcmp(cmd,"help")==0)
         return 9;
+    if(strcmp(cmd,"ll")==0)
+        return 10;
     return -1;
 }
 
