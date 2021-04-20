@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h> 
 #include<string.h>
+#include<stdbool.h>
 //#define global_space 5
 #ifdef __linux__
 #define ANSI_COLOR_RED     "\x1b[31m"
@@ -9,12 +10,16 @@
 #define ANSI_COLOR_RED     ""
 #define ANSI_COLOR_RESET   ""
 #endif
+#define RED true;
+#define BLK false;
+
 struct node
 {
     struct node* left;
     struct node* right;
     int key;
     int cnt;
+    bool color;
     //int times=0;
 };
 typedef struct node node_t;
@@ -164,6 +169,7 @@ node_t* new_node(int k){
     n->right=NULL;
     n->key=k;
     n->cnt=1;
+    n->color=BLK;
     return n;
 }
 
