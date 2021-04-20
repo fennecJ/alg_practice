@@ -42,6 +42,7 @@ void transp(tree_t* T,node_t* u,node_t* v);
 void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
 void l_rotate(tree_t* T,node_t* x);
+void r_rotate(tree_t* T,node_t* x);
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
 
@@ -155,10 +156,17 @@ switch (c)
         case 10:
             scanf("%d",&tmp);
             printf("left-rotate at %d\n",tmp);
-            node_t* t = search(T->root,tmp);
+            t = search(T->root,tmp);
             l_rotate(T,t);
             print_tree(T,T->root,0,t->key);
             break;
+        case 11:
+            scanf("%d",&tmp);
+            printf("right-rotate at %d\n",tmp);
+            t = search(T->root,tmp);
+            r_rotate(T,t);
+            print_tree(T,T->root,0,t->key);
+            break;    
     default:
         printf("Invalid command, type help to see available operations\n");
         break;
@@ -347,6 +355,22 @@ void l_rotate(tree_t* T,node_t* x){
 }
 
 
+void r_rotate(tree_t* T,node_t* x){
+    node_t* y=x->left;
+    x->left=y->right;
+    if(parent(T,x)==T->nil)
+        T->root=y;
+    else if(x==parent(T,x)->right)
+        parent(T,x)->right=y;
+    else
+        parent(T,x)->left=y;
+    y->right=x;
+}
+
+
+
+
+
 int cmd_parse(char* cmd){
     if(strcmp(cmd,"s")==0)
         return 1;
@@ -366,8 +390,10 @@ int cmd_parse(char* cmd){
         return 8;
     if(strcmp(cmd,"help")==0)
         return 9;
-    if(strcmp(cmd,"ll")==0)
+    if(strcmp(cmd,"lr")==0)
         return 10;
+    if(strcmp(cmd,"rr")==0)
+        return 11;
     return -1;
 }
 
