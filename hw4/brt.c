@@ -29,11 +29,11 @@ struct tree{
 };
 
 typedef struct tree tree_t;
-node_t* new_node(int k);
+node_t* new_node(tree_t* T,int k);
 tree_t* new_tree();
 node_t* search(node_t* head,int x);
 void insert(tree_t* T,int x);
-void print_tree(node_t* root, int i,int tar);
+void print_tree(tree_t* T,node_t* root, int i,int tar);
 node_t* max_node(node_t* head);
 node_t* min_node(node_t* head);
 node_t* suc(tree_t* T,node_t* head);
@@ -41,6 +41,7 @@ node_t* pred(tree_t* T,node_t* head);
 void transp(tree_t* T,node_t* u,node_t* v);
 void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
+void l_rotate(tree_t* T,node_t* x);
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
 
@@ -64,7 +65,7 @@ switch (c)
             scanf("%d",&tmp);
             printf("Finding %d in tree\n",tmp);
             if(search(T->root,tmp))
-            print_tree(T->root,0,tmp);
+            print_tree(T,T->root,0,tmp);
             else
             printf("%d was not found!!\n",tmp);
             break;
@@ -73,7 +74,7 @@ switch (c)
             if(T->root){
             t=max_node(T->root);
             printf("Max element is %d\n",t->key);
-            print_tree(T->root,0,t->key);
+            print_tree(T,T->root,0,t->key);
             }else
             printf("The tree was empty!!\n");
         break;
@@ -82,7 +83,7 @@ switch (c)
             if(T->root){
             t=min_node(T->root);
             printf("min element is %d\n",t->key);
-            print_tree(T->root,0,t->key);
+            print_tree(T,T->root,0,t->key);
             }else
             printf("The tree was empty!!\n");
         break;
@@ -94,7 +95,7 @@ switch (c)
                 t=suc(T,t);
                 if(t){
                 printf("Successor of %d in tree: %d\n",tmp,t->key);
-                print_tree(T->root,0,t->key);
+                print_tree(T,T->root,0,t->key);
                 }else
                 printf("%d have no successor!!\n",tmp);
             }else
@@ -108,7 +109,7 @@ switch (c)
                 t=pred(T,t);
                 if(t){
                 printf("Predecessor of %d in tree: %d\n",tmp,t->key);
-                print_tree(T->root,0,t->key);
+                print_tree(T,T->root,0,t->key);
                 }else
                 printf("%d have no predecessor!!\n",tmp);
             }else
@@ -122,20 +123,20 @@ switch (c)
             t->cnt++;
             else
             insert(T,tmp);
-            print_tree(T->root,0,tmp);
+            print_tree(T,T->root,0,tmp);
         break;
         case 7:
             scanf("%d",&tmp);
             printf("Delete %d from tree\n",tmp);
             t=search(T->root,tmp);
-            if(t)
+            if(t!=T->nil)
             if(t->cnt>1){
             t->cnt--;
-            print_tree(T->root,0,tmp);
+            print_tree(T,T->root,0,tmp);
             }
             else{
                 delete(T,t);
-                print_tree(T->root,0,tmp);
+                print_tree(T,T->root,0,tmp);
             }else
             printf("%d was not in the tree!!\n",tmp);
         break;
@@ -143,13 +144,20 @@ switch (c)
             scanf("%d",&tmp);
             printf("Finding parent of %d in tree\n",tmp);
             node_t* p=parent(T,search(T->root,tmp));
-            if(p)
-            print_tree(T->root,0,p->key);
+            if(p!=T->nil)
+            print_tree(T,T->root,0,p->key);
             else
             printf("Parent not found\n");
         break;
         case 9:
             printf("Available commands:\ns {int} - search for specific node with selected key {int}\nmax - return max from tree\nmin - return min from tree\nsu {int} - search for successor of specific node with selected key {int}\npr {int} - search for predecessor of specific node with selected key {int}\ni {int} - insert node with key {int} into tree\nd {int} - delete specific node with selected key {int}\npar {int} - return the parent of specific node with selected key {int}\nhelp - print the help\nq - exit\n");
+            break;
+        case 10:
+            scanf("%d",&tmp);
+            printf("left-rotate at %d\n",tmp);
+            node_t* t = search(T->root,tmp);
+            l_rotate(T,t);
+            print_tree(T,T->root,0,t->key);
             break;
     default:
         printf("Invalid command, type help to see available operations\n");
@@ -162,12 +170,12 @@ switch (c)
 
 }
 
-node_t* new_node(int k){
+node_t* new_node(tree_t* T,int k){
     node_t* n = malloc(sizeof(node_t));
     if(!n)
         return n;
-    n->left=NULL;
-    n->right=NULL;
+    n->left=T->nil;
+    n->right=T->nil;
     n->key=k;
     n->cnt=1;
     n->color=BLK;
@@ -196,13 +204,13 @@ return head;
 
 void insert(tree_t* T,int x){
     node_t* head=T->root;
-    node_t* ins=new_node(x);
+    node_t* ins=new_node(T,x);
     if(!head){
     T->root=ins;
     return;
     }
     node_t* tmp=NULL;
-    while(head){
+    while(head!=T->nil){
         tmp = head;
         if(x<head->key)
         head=head->left;
@@ -219,10 +227,10 @@ void print_tab(int i){
     for(int j = 0;j<i;j++)
     printf("|\t");
 }
-void print_tree(node_t* root, int i,int tar){
-    if(root==NULL)
+void print_tree(tree_t* T,node_t* root, int i,int tar){
+    if(root==T->nil)
     return;
-    print_tree(root->right,i+1,tar);
+    print_tree(T,root->right,i+1,tar);
     if(i!=0){
         print_tab(i-1);
             if(root->key==tar){
@@ -246,7 +254,7 @@ void print_tree(node_t* root, int i,int tar){
             printf("%d[%d]\n",root->key,root->cnt);
             else printf("%d\n",root->key);
     }
-    print_tree(root->left,i+1,tar);
+    print_tree(T,root->left,i+1,tar);
 }
 
 node_t* max_node(node_t* head){
@@ -327,11 +335,15 @@ void delete(tree_t* T,node_t* z){
 
 
 void l_rotate(tree_t* T,node_t* x){
-    node_t* y = x->left;
+    node_t* y=x->right;
     x->right=y->left;
-    if(parent(T,x)==NULL)
+    if(parent(T,x)==T->nil)
         T->root=y;
-    //else if(x==parent(x)->left)
+    else if(x==parent(T,x)->left)
+        parent(T,x)->left=y;
+    else
+        parent(T,x)->right=y;
+    y->left=x;
 }
 
 
