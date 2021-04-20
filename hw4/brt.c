@@ -4,7 +4,7 @@
 #include<stdbool.h>
 //#define global_space 5
 #ifdef __linux__
-#define ANSI_COLOR_BLUE    "\e[0;34m"
+#define ANSI_COLOR_BLUE    "\x1b[36m"
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 #else
@@ -33,7 +33,7 @@ struct tree{
 typedef struct tree tree_t;
 node_t* new_node(tree_t* T,int k);
 tree_t* new_tree();
-node_t* search(node_t* head,int x);
+node_t* search(tree_t* T,node_t* head,int x);
 void insert(tree_t* T,int x);
 void print_tree(tree_t* T,node_t* root, int i,int tar);
 node_t* max_node(node_t* head);
@@ -45,10 +45,10 @@ void delete(tree_t* T,node_t* z);
 node_t* parent(tree_t* T,node_t* tar);
 void l_rotate(tree_t* T,node_t* x);
 void r_rotate(tree_t* T,node_t* x);
-void rb_insert(tree_t* T,node_t* z)
+void rb_insert(tree_t* T,node_t* z);
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
 int cmd_parse(char* cmd);
-
+void FIX(tree_t* T,node_t* z);
 
 int main(){
 tree_t* T=new_tree();
@@ -68,7 +68,7 @@ switch (c)
         case 1:
             scanf("%d",&tmp);
             printf("Finding %d in tree\n",tmp);
-            if(search(T->root,tmp))
+            if(search(T,T->root,tmp))
             print_tree(T,T->root,0,tmp);
             else
             printf("%d was not found!!\n",tmp);
@@ -94,7 +94,7 @@ switch (c)
         case 4:
             scanf("%d",&tmp);
             printf("Finding successor of %d in tree\n",tmp);
-            t=search(T->root,tmp);
+            t=search(T,T->root,tmp);
             if(t){
                 t=suc(T,t);
                 if(t){
@@ -108,7 +108,7 @@ switch (c)
         case 5:
             scanf("%d",&tmp);
             printf("Finding predecessor of %d in tree\n",tmp);
-            t=search(T->root,tmp);
+            t=search(T,T->root,tmp);
             if(t){
                 t=pred(T,t);
                 if(t){
@@ -122,17 +122,15 @@ switch (c)
         case 6:
             scanf("%d",&tmp);
             printf("Insert %d into tree\n",tmp);
-            t = search(T->root,tmp);
-            if(t)
-            t->cnt++;
-            else
-            insert(T,tmp);
-            print_tree(T,T->root,0,tmp);
+            t=new_node(T,tmp);
+
+            rb_insert(T,t);
+            print_tree(T,T->root,0,t->key);
         break;
         case 7:
             scanf("%d",&tmp);
             printf("Delete %d from tree\n",tmp);
-            t=search(T->root,tmp);
+            t=search(T,T->root,tmp);
             if(t!=T->nil)
             if(t->cnt>1){
             t->cnt--;
@@ -147,7 +145,7 @@ switch (c)
         case 8:
             scanf("%d",&tmp);
             printf("Finding parent of %d in tree\n",tmp);
-            node_t* p=parent(T,search(T->root,tmp));
+            node_t* p=parent(T,search(T,T->root,tmp));
             if(p!=T->nil)
             print_tree(T,T->root,0,p->key);
             else
@@ -159,14 +157,14 @@ switch (c)
         case 10:
             scanf("%d",&tmp);
             printf("left-rotate at %d\n",tmp);
-            t = search(T->root,tmp);
+            t = search(T,T->root,tmp);
             l_rotate(T,t);
             print_tree(T,T->root,0,t->key);
             break;
         case 11:
             scanf("%d",&tmp);
             printf("right-rotate at %d\n",tmp);
-            t = search(T->root,tmp);
+            t = search(T,T->root,tmp);
             r_rotate(T,t);
             print_tree(T,T->root,0,t->key);
             break;    
@@ -184,7 +182,7 @@ switch (c)
 node_t* new_node(tree_t* T,int k){
     node_t* n = malloc(sizeof(node_t));
     if(!n)
-        return n;
+        return T->nil;
     n->left=T->nil;
     n->right=T->nil;
     n->key=k;
@@ -197,14 +195,17 @@ tree_t* new_tree(){
     tree_t* T = malloc(sizeof(tree_t));
     if(!T)
     return T;
-    T->root=NULL;
     T->nil=malloc(sizeof(node_t));
     T->nil->color=BLK;
+    T->nil->cnt=1;
+    T->nil->left=T->nil;
+    T->nil->right=T->nil;
+    T->root=T->nil;
     return T;
 }
 
-node_t* search(node_t* head,int x){
-while(head!=NULL && head->key!=x){
+node_t* search(tree_t* T,node_t* head,int x){
+while(head!=T->nil && head->key!=x){
     if(head->key>x)
     head=head->left;
     else
@@ -236,50 +237,43 @@ void rb_insert(tree_t* T,node_t* z){
 }
 
 void FIX(tree_t* T,node_t* z){
-    while(parent(z)->color==RED){
-        if(parent(z)==parent(parent(z))->left){
-            node_t* y = parent(parent(z))->right;
+    while(parent(T,z)->color==RED){
+        if(parent(T,z)==parent(T,parent(T,z))->left){
+            node_t* y = parent(T,parent(T,z))->right;
             if(y->color==RED){
-                parent(z)->color=BLK;
+                parent(T,z)->color=BLK;
                 y->color=BLK;
-                parent(parent(z))->color=RED;
-                z=parent(parent(z));
+                parent(T,parent(T,z))->color=RED;
+                z=parent(T,parent(T,z));
             }
-            else if (z==parent(z)->right)
+            else if (z==parent(T,z)->right)
             {
-                z=parent(z);
+                z=parent(T,z);
                 l_rotate(T,z);
             }
-            parent(z)->color=BLK;
-            parent(parent(z))->color=RED;
-            r_rotate(T,parent(parent(z)));
+            parent(T,z)->color=BLK;
+            parent(T,parent(T,z))->color=RED;
+            r_rotate(T,parent(T,parent(T,z)));
         }else{
-            node_t* y = parent(parent(z))->left;
+            node_t* y = parent(T,parent(T,z))->left;
             if(y->color==RED){
-                parent(z)->color=BLK;
+                parent(T,z)->color=BLK;
                 y->color=BLK;
-                parent(parent(z))->color=RED;
-                z=parent(parent(z));
+                parent(T,parent(T,z))->color=RED;
+                z=parent(T,parent(T,z));
             }
-            else if (z==parent(z)->left)
+            else if (z==parent(T,z)->left)
             {
-                z=parent(z);
+                z=parent(T,z);
                 r_rotate(T,z);
             }
-            parent(z)->color=BLK;
-            parent(parent(z))->color=RED;
-            l_rotate(T,parent(parent(z)));
+            parent(T,z)->color=BLK;
+            parent(T,parent(T,z))->color=RED;
+            l_rotate(T,parent(T,parent(T,z)));
         }
     }
 T->root->color=BLK;
 }
-
-
-
-
-
-
-
 
 
 
@@ -310,8 +304,12 @@ void print_tab(int i){
     printf("|\t");
 }
 void print_tree(tree_t* T,node_t* root, int i,int tar){
-    if(root==T->nil)
+    if(root==T->nil){
+        if(i!=0)
+        print_tab(i-1);
+    printf("|======="ANSI_COLOR_BLUE"N"ANSI_COLOR_RESET"\n");
     return;
+    }
     print_tree(T,root->right,i+1,tar);
     if(i!=0){
         print_tab(i-1);
@@ -378,7 +376,7 @@ node_t* parent(tree_t* T,node_t* tar){
     node_t* head=T->root;
     if(head==tar)
     return T->nil;
-    while(head){
+    while(head!=T->nil){
         if(head->left==tar||head->right==tar)
         return head;
         else if (head->key>tar->key)
@@ -417,6 +415,7 @@ void delete(tree_t* T,node_t* z){
 
 
 void l_rotate(tree_t* T,node_t* x){
+    //printf("Call l_rotate at %d\n",x->key);
     node_t* y=x->right;
     x->right=y->left;
     if(parent(T,x)==T->nil)
@@ -426,10 +425,13 @@ void l_rotate(tree_t* T,node_t* x){
     else
         parent(T,x)->right=y;
     y->left=x;
+    y->cnt=x->cnt;
+    x->cnt=x->left->cnt+x->right->cnt+1;
 }
 
 
 void r_rotate(tree_t* T,node_t* x){
+    //printf("Call r_rotate at %d\n",x->key);
     node_t* y=x->left;
     x->left=y->right;
     if(parent(T,x)==T->nil)
@@ -439,6 +441,8 @@ void r_rotate(tree_t* T,node_t* x){
     else
         parent(T,x)->left=y;
     y->right=x;
+    x->cnt=y->cnt;
+    y->cnt=y->left->cnt+y->right->cnt+1;
 }
 
 
