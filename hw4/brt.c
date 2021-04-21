@@ -43,20 +43,10 @@ node_t* parent(tree_t* T,node_t* tar);
 void l_rotate(tree_t* T,node_t* x);
 void r_rotate(tree_t* T,node_t* x);
 void rb_insert(tree_t* T,node_t* z);
+node_t* sel(tree_t* T,node_t* x,int i);
+
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
-node_t* sel(tree_t* T,node_t* x,int i){
-    if(x==T->nil){
-    return T->nil;
-    printf("Cannot find %d-th smallest key in RBT\n",i);
-    }
-    int r = x->left->cnt+1;
-    if(i==r)
-        return x;
-    else if(i<r)
-        return sel(T,x->left,i);
-    else
-        return sel(T,x->right,i-r);
-}
+
 
 int cmd_parse(char* cmd);
 void FIX(tree_t* T,node_t* z);
@@ -86,6 +76,7 @@ switch (c)
             scanf("%d",&tmp);
             printf("Sel %d-th smallest key from tree\n",tmp);
             t=sel(T,T->root,tmp);
+            if(t!=T->nil)
             printf("%d-th smallest key was found at %d\n",tmp,t->key);
             print_tree(T,T->root,0,t->key);
         break;
@@ -294,9 +285,19 @@ void r_rotate(tree_t* T,node_t* x){
     y->cnt=y->left->cnt+y->right->cnt+1;
 }
 
-
-
-
+node_t* sel(tree_t* T,node_t* x,int i){
+    if(x==T->nil){
+    printf("Key not found\n");
+    return T->nil;
+    }
+    int r = x->left->cnt+1;
+    if(i==r)
+        return x;
+    else if(i<r)
+        return sel(T,x->left,i);
+    else
+        return sel(T,x->right,i-r);
+}
 
 int cmd_parse(char* cmd){
     if(strcmp(cmd,"i")==0)
