@@ -15,11 +15,15 @@
 #define RED true
 #define BLK false
 #define INFO \
-"Available commands:\n\
-i {int} - insert node with key {int} into tree\n\
-graph - print the tree in 2-D\n\
-help - print the help\nq - exit\n\
-"
+"Available commands:\n"\
+ANSI_COLOR_RED"i    {int}"ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Insert node with key {int} into tree"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"sel  {int}"ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Select {int}-th smallest key from tree"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"rank {int}"ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Get the rank of {int}"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"graph     "ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Print the tree in 2-D graph"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"help      "ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Print the help"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"pr        "ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"Print the tree in Pre-order traversal"ANSI_COLOR_RESET"\n"\
+ANSI_COLOR_RED"q         "ANSI_COLOR_RESET" - " ANSI_COLOR_BLUE"exit"ANSI_COLOR_RESET"\n"\
+
 struct node
 {
     struct node* left;
@@ -46,7 +50,7 @@ void rb_insert(tree_t* T,node_t* z);
 node_t* sel(tree_t* T,node_t* x,int i);
 int rank(tree_t* T,node_t* x);
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
-
+void pre_order(tree_t* T,node_t* t);
 
 int cmd_parse(char* cmd);
 void FIX(tree_t* T,node_t* z);
@@ -74,7 +78,7 @@ switch (c)
         break;
         case 2:
             scanf("%d",&tmp);
-            printf("Sel %d-th smallest key from tree\n",tmp);
+            printf("Select %d-th smallest key from tree\n",tmp);
             t=sel(T,T->root,tmp);
             if(t!=T->nil){
             if(t->color)
@@ -97,7 +101,7 @@ switch (c)
             printf("%d WAS NOT IN TREE\n",tmp);
         break;
         case 4:
-
+            pre_order(T,T->root);
         break;
         case 5:
             print_tree(T,T->root,0,tmp);
@@ -331,6 +335,18 @@ int rank(tree_t* T,node_t* x){
     }
     return r;
 }
+
+void pre_order(tree_t* T,node_t* t){
+    if(t==T->nil)
+    return;
+    if(t->color)
+        printf(ANSI_COLOR_RED"%d red %d"ANSI_COLOR_RESET"\n",t->key,t->cnt);
+    else
+        printf(ANSI_COLOR_BLUE"%d black %d"ANSI_COLOR_RESET"\n",t->key,t->cnt);
+    pre_order(T,t->left);
+    pre_order(T,t->right);
+}
+
 
 int cmd_parse(char* cmd){
     if(strcmp(cmd,"i")==0)
