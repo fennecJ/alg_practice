@@ -143,6 +143,7 @@ void rb_insert(tree_t* T,node_t* z){
     node_t* x = T->root;
     while(x!=T->nil){
         y=x;
+        x->cnt++;
         if(z->key<x->key)
             x=x->left;
         else
@@ -210,9 +211,11 @@ void print_tab(int i){
 }
 void print_tree(tree_t* T,node_t* root, int i,int tar){
     if(root==T->nil){
+        /*
         if(i!=0)
         print_tab(i-1);
-    printf("|======="ANSI_COLOR_BLUE"N"ANSI_COLOR_RESET"\n");
+        printf("|======="ANSI_COLOR_BLUE"N"ANSI_COLOR_RESET"\n");
+        */
     return;
     }
     print_tree(T,root->right,i+1,tar);
