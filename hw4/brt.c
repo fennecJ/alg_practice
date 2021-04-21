@@ -44,7 +44,7 @@ void l_rotate(tree_t* T,node_t* x);
 void r_rotate(tree_t* T,node_t* x);
 void rb_insert(tree_t* T,node_t* z);
 node_t* sel(tree_t* T,node_t* x,int i);
-
+int rank(tree_t* T,node_t* x);
 //void mod_parent(tree_t* T,node_t* tar,node_t* post);
 
 
@@ -70,15 +70,37 @@ switch (c)
             printf("Insert %d into tree\n",tmp);
             t=new_node(T,tmp);
             rb_insert(T,t);
-            print_tree(T,T->root,0,t->key);
+            //print_tree(T,T->root,0,t->key);
         break;
         case 2:
             scanf("%d",&tmp);
             printf("Sel %d-th smallest key from tree\n",tmp);
             t=sel(T,T->root,tmp);
-            if(t!=T->nil)
-            printf("%d-th smallest key was found at %d\n",tmp,t->key);
-            print_tree(T,T->root,0,t->key);
+            if(t!=T->nil){
+            if(t->color)
+            printf(ANSI_COLOR_RED"%d red %d"ANSI_COLOR_RESET"\n",t->key,t->cnt);
+            else
+            printf(ANSI_COLOR_BLUE"%d black %d"ANSI_COLOR_RESET"\n",t->key,t->cnt);
+            }
+            //print_tree(T,T->root,0,t->key);
+        break;
+        case 3:
+            scanf("%d",&tmp);
+            printf("Get the rank of %d\n",tmp);
+            t=search(T,T->root,tmp);
+            if(t){
+                tmp = rank(T,t);
+                printf("%d\n",tmp);
+                tmp=t->key;
+            }
+            else
+            printf("%d WAS NOT IN TREE\n",tmp);
+        break;
+        case 4:
+
+        break;
+        case 5:
+            print_tree(T,T->root,0,tmp);
         break;
         case 6:
             printf(INFO);
@@ -297,6 +319,17 @@ node_t* sel(tree_t* T,node_t* x,int i){
         return sel(T,x->left,i);
     else
         return sel(T,x->right,i-r);
+}
+
+int rank(tree_t* T,node_t* x){
+    int r = x->left->cnt+1;
+    node_t* y = x;
+    while(y!=T->root){
+        if(y==parent(T,y)->right)
+            r += parent(T,y)->left->cnt + 1;
+        y=parent(T,y);
+    }
+    return r;
 }
 
 int cmd_parse(char* cmd){
