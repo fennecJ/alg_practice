@@ -6,12 +6,25 @@ int main(){
     FILE* fo;
     fi=fopen("input.txt","r");
     fo=fopen("output.txt","w");
-    int len,k;
-    fscanf(fi,"%d\n%d\n",&len,&k);
+    int k;
+    int len=0;
+    while(fscanf(fi,"%d\n",&k)!=EOF){
+    len++;
+    printf("%d\n",len);
+    }
+    fclose(fi);
+    fi=fopen("input.txt","r");
     int* a = malloc(sizeof(int)*len);
-    int i = 0;
+    for(k=0;k<len;k++){
+        fscanf(fi,"%d\n",a+k);
+    }
+    
+    /*
     while(fscanf(fi,"%d\n",a+i)!=EOF)
-    i++;
+    i++;*/
 
+    
+    //while(fscanf(fi,"%d\n",a+i)!=EOF)
+    
 
 }
