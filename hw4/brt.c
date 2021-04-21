@@ -121,7 +121,7 @@ tree_t* new_tree(){
     return T;
     T->nil=malloc(sizeof(node_t));
     T->nil->color=BLK;
-    T->nil->cnt=1;
+    T->nil->cnt=0;
     T->nil->left=T->nil;
     T->nil->right=T->nil;
     T->root=T->nil;
