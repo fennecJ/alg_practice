@@ -170,14 +170,15 @@ void FIX(tree_t* T,node_t* z){
                 parent(T,parent(T,z))->color=RED;
                 z=parent(T,parent(T,z));
             }
-            else if (z==parent(T,z)->right)
-            {
+            else {
+            if (z==parent(T,z)->right){
                 z=parent(T,z);
                 l_rotate(T,z);
             }
             parent(T,z)->color=BLK;
             parent(T,parent(T,z))->color=RED;
             r_rotate(T,parent(T,parent(T,z)));
+            }
         }else{
             node_t* y = parent(T,parent(T,z))->left;
             if(y->color==RED){
@@ -186,17 +187,19 @@ void FIX(tree_t* T,node_t* z){
                 parent(T,parent(T,z))->color=RED;
                 z=parent(T,parent(T,z));
             }
-            else if (z==parent(T,z)->left)
-            {
+            else {
+            if (z==parent(T,z)->left){
                 z=parent(T,z);
                 r_rotate(T,z);
             }
             parent(T,z)->color=BLK;
             parent(T,parent(T,z))->color=RED;
             l_rotate(T,parent(T,parent(T,z)));
+            }
         }
     }
 T->root->color=BLK;
+T->nil->color=BLK;
 }
 
 
