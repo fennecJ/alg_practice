@@ -289,7 +289,7 @@ node_t *parent(tree_t *T, node_t *tar) {
 }
 
 void l_rotate(tree_t *T, node_t *x) {
-    printf("Call l_rotate at %d\n", x->key);
+    // printf("Call l_rotate at %d\n", x->key);
     node_t *y = x->right;
     x->right = y->left;
     if (parent(T, x) == T->nil)
@@ -304,7 +304,7 @@ void l_rotate(tree_t *T, node_t *x) {
 }
 
 void r_rotate(tree_t *T, node_t *x) {
-    printf("Call r_rotate at %d\n", x->key);
+    // printf("Call r_rotate at %d\n", x->key);
     node_t *y = x->left;
     x->left = y->right;
     if (parent(T, x) == T->nil)
