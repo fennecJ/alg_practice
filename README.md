@@ -1,4 +1,4 @@
-# Some basic alg practice mainly based on CLRS
+# Some basic alg practice for my school's course
 ## hw1
 ### cal.c
 * A basic calculator implemented with stack
