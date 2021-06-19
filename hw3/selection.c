@@ -33,7 +33,7 @@ int sel(int *arr, int l, int r, int i) {
             for (w = 0; w < len / 5; w++)
                 hold[w] = ins(arr + l + 5 * w, 5);
             if (w * 5 < len)
-                hold[w++] = ins(arr + l + w * 5, len % 5);
+                hold[w++] = ins(arr + l + w * 5, len - w * 5);
             int med;
             med = (w == 1) ? (hold[0]) : (sel(hold, 0, w - 1, w / 2));
             int q = partition(arr, l, r, med);
