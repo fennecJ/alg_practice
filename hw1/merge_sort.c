@@ -1,5 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+
+void printArr(int *a, int len) {
+    printf("[ ");
+    for (int i = 0; i < len - 1; i++)
+        printf("%d, ", a[i]);
+    printf("%d ]", a[len - 1]);
+}
+
 int *merge(int *l, int l_len, int *r, int r_len) {
     int len = l_len + r_len;
     int *tmp = malloc(sizeof(int) * len);
@@ -19,6 +27,7 @@ int *merge(int *l, int l_len, int *r, int r_len) {
         tmp[i++] = r[k];
     return tmp;
 }
+
 int *split(int *a, int len) {
     if (len < 2)
         return a;
