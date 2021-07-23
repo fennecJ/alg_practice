@@ -2,10 +2,10 @@
 #include <stdlib.h>
 
 void printArr(int *a, int len) {
-    printf("[ ");
+    printf("[");
     for (int i = 0; i < len - 1; i++)
         printf("%d, ", a[i]);
-    printf("%d ]", a[len - 1]);
+    printf("%d]", a[len - 1]);
 }
 
 int *merge(int *l, int l_len, int *r, int r_len) {
@@ -37,6 +37,23 @@ int *split(int *a, int len) {
     return merge(l, c, r, len - c);
 }
 
+void printStep(int *a, int len) {
+    for (int i = len; i > 0; i /= 2) {
+        for (int j = 0; j < len; j += i) {
+            printArr(a + j, i);
+        }
+        printf("\n");
+    }
+
+    for (int i = 2; i <= len; i *= 2) {
+        for (int j = 0; j < len; j += i) {
+            int *tmp = split(a + j, i);
+            printArr(tmp, i);
+        }
+        printf("\n");
+    }
+}
+
 int main() {
     FILE *fi;
     FILE *fo;
@@ -49,6 +66,7 @@ int main() {
     while (fscanf(fi, "%d\n", a + i) != EOF)
         i++;
     int *b = split(a, len);
+    printStep(a, len);
     i = 0;
     fprintf(fo, "%d\n", len);
     for (; i < len; i++)
