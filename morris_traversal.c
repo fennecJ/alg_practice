@@ -12,29 +12,29 @@ node *new_node(int data);
 node *build_tree(char *arr[], int i, int n);
 void print_tree(node *root, int i); // Print 2D tree in 90 degrees CCW
 void print_tab(int);
-void morris_inOrder(node *current);
-void morris_preOrder(node *current);
+void inOrder(node *);
+void preOrder(node *);
+void morris_inOrder(node *);
+void morris_preOrder(node *);
+void invert_bin_tree(node *root);
+void swap(node **a, node **b);
 
 int main() {
     char *datas[] = {"1", "2", "3", "4", "5", "n", "7",
                      "n", "n", "n", "n", "n", "n", "14"};
     node *root = build_tree(datas, 0, 14);
-    print_tree(root, 0);
-
-    inOrder(root);
-    printf("\n");
-    morris_inOrder(root);
-    printf("\n");
-
+    /*
     preOrder(root);
-    printf("\n");
+    printf("\n\n");
     morris_preOrder(root);
-    printf("\n");
+    printf("\n\n");*/
+    print_tree(root, 0);
+    invert_bin_tree(root);
+    printf("\n\n");
+    print_tree(root, 0);
 }
 
 node *new_node(int data) {
-    if (!data)
-        return NULL;
     node *t = malloc(sizeof(node));
     t->data = data;
     t->left = NULL;
@@ -87,9 +87,6 @@ void morris_inOrder(node *head) {
                 continue;
             }
             q->right = NULL;
-            printf("%d ", cur->data);
-            cur = cur->right;
-            continue;
         }
         printf("%d ", cur->data);
         cur = cur->right;
@@ -117,4 +114,52 @@ void morris_preOrder(node *head) {
         printf("%d ", cur->data);
         cur = cur->right;
     }
+}
+
+void swap(node **a, node **b) {
+    node *tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+void invert_bin_tree(node *root) {
+    node *cur = new_node(0);
+    cur->left = root;
+    while (cur) {
+        node *q = cur->left;
+        if (q) {
+            while (q->right && q->right != cur)
+                q = q->right;
+            if (!q->right) {
+                q->right = cur;
+                cur = cur->left;
+                continue;
+            }
+            node *tmp = cur->left;
+            while (tmp) {
+                swap(&tmp->left, &tmp->right);
+                if (tmp == q)
+                    break;
+                tmp = tmp->left;
+            }
+            q->left = NULL;
+        }
+        cur = cur->right;
+    }
+}
+
+void inOrder(node *root) {
+    if (!root)
+        return;
+    inOrder(root->left);
+    printf("%d ", root->data);
+    inOrder(root->right);
+}
+
+void preOrder(node *root) {
+    if (!root)
+        return;
+    printf("%d ", root->data);
+    preOrder(root->left);
+    preOrder(root->right);
 }
