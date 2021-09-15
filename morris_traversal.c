@@ -17,6 +17,7 @@ void preOrder(node *);
 void morris_inOrder(node *);
 void morris_preOrder(node *);
 void invert_bin_tree(node *root);
+void invert_bin_tree2(node *root);
 void swap(node **a, node **b);
 
 int main() {
@@ -27,9 +28,10 @@ int main() {
     preOrder(root);
     printf("\n\n");
     morris_preOrder(root);
-    printf("\n\n");*/
-    print_tree(root, 0);
-    invert_bin_tree(root);
+    printf("\n\n");
+    */
+    print_tree(root, 0); // Print 2D tree in 90 degrees CCW
+    invert_bin_tree2(root);
     printf("\n\n");
     print_tree(root, 0);
 }
@@ -145,6 +147,32 @@ void invert_bin_tree(node *root) {
             q->left = NULL;
         }
         cur = cur->right;
+    }
+}
+
+void invert_bin_tree2(node *root) {
+    node *cur = root;
+    while (cur) {
+        node *q = cur->left;
+        if (q) {
+            while (q->left && q->left != cur)
+                q = q->left;
+
+            if (!q->left) {
+                q = cur->left;
+                while (q->right)
+                    q = q->right;
+
+                q->right = cur;
+            } else {
+                q->left = NULL;
+                swap(&cur->left, &cur->right);
+            }
+            cur = cur->left;
+            continue;
+        }
+        swap(&cur->left, &cur->right);
+        cur = cur->left;
     }
 }
 
