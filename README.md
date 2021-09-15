@@ -27,3 +27,7 @@
 ## hw5
 ### 0_1_knapsack.c
 * A program intented to solve the 0_1_knapsack problem via DP
+
+## morris_travesal.c
+* A program which introduce a way to travel a binary tree in preOrder/inOrder in O(1) space without recursion/stack/queue
+* Also introduce a way to invert a binary tree in O(1) space without recursion/stack/queue
