@@ -119,7 +119,7 @@ void morris_preOrder(node *head) {
     }
 }
 
-void swap(node **a, node **b) {
+inline void swap(node **a, node **b) {
     node *tmp = *a;
     *a = *b;
     *b = tmp;
